@@ -40,6 +40,11 @@ function filterByQuery(query, animalsArray) {
     }
     return filteredResults;
 }
+// searches for an id code and displayes that index id
+function findById(id, animalsArray) {
+    const result = animalsArray.filter(animal => animal.id === id)[0];
+    return result;
+};
 
 app.get('/api/animals', (req, res) => {
     let results = animals;
@@ -47,6 +52,15 @@ app.get('/api/animals', (req, res) => {
         results = filterByQuery(req.query, results);
     }
     res.json(results);
+});
+// must come after the base query searches by id
+app.get('/api/animals/:id', (req, res) => {
+    const result = findById(req.params.id, animals);
+    if (result) {
+        res.json(result);
+    } else {
+        res.send(404);
+    }
 });
 
 app.listen(PORT, () => {
